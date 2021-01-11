@@ -3,6 +3,7 @@ import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/create-account.dto';
+import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 
@@ -19,12 +20,18 @@ export class UserResolver {
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
     try {
-      const { ok, error } = await this.userService.createAccount(
-        createAccountInput,
-      );
-      return { ok, error };
+      return this.userService.createAccount(createAccountInput);
     } catch (error) {
       return { error, ok: false };
+    }
+  }
+
+  @Mutation(() => LoginOutput)
+  async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
+    try {
+      return this.userService.login(loginInput);
+    } catch (error) {
+      return { ok: false, error };
     }
   }
 }
