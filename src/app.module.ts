@@ -13,6 +13,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
+import { Verification } from './users/entities/verification.entity';
 
 @Module({
   imports: [
@@ -40,7 +41,7 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
       namingStrategy: new SnakeNamingStrategy(),
-      entities: [User],
+      entities: [User, Verification],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
