@@ -7,7 +7,6 @@ import {
   CreateAccountOutput,
 } from './dtos/create-account.dto';
 import { User } from './entities/user.entity';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
@@ -21,7 +20,6 @@ export class UserService {
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Verification)
     private readonly verifications: Repository<Verification>,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
@@ -47,7 +45,6 @@ export class UserService {
       this.mailService.sendVerificationEmail(user.email, verification.code);
       return { ok: true };
     } catch (error) {
-      console.log(error);
       return { ok: false, error: "Couldn't create account." };
     }
   }
@@ -79,14 +76,14 @@ export class UserService {
     } catch (error) {
       return {
         ok: false,
-        error,
+        error: "Can't log user in.",
       };
     }
   }
 
   async findById(id: number): Promise<UserProfileOutput> {
     try {
-      const user = await this.users.findOne({ id });
+      const user = await this.users.findOneOrFail({ id });
       if (user) {
         return {
           ok: true,
@@ -106,7 +103,7 @@ export class UserService {
     { email, password }: EditProfileInput,
   ): Promise<EditProfileOutput> {
     try {
-      const user = await this.users.findOne({ id: userId });
+      const user = await this.users.findOne(userId);
       if (email) {
         user.email = email;
         user.verified = false;
@@ -145,12 +142,14 @@ export class UserService {
           ok: true,
         };
       }
-      throw Error();
-    } catch (error) {
-      console.log(error);
       return {
         ok: false,
-        error,
+        error: 'Verification not found',
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not verify email.',
       };
     }
   }

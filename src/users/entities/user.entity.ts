@@ -10,7 +10,7 @@ import { CoreEntity } from 'src/common/entities/core.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 import { IsEmail, IsEnum } from 'class-validator';
 
-enum UserRole {
+export enum UserRole {
   Client = 'client',
   Owner = 'owner',
   Delevery = 'delevery',
