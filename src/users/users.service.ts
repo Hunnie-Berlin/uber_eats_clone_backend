@@ -132,7 +132,6 @@ export class UserService {
     try {
       const verification = await this.verifications.findOne(
         { code },
-        // { loadRelationIds: true },
         { relations: ['user'] },
       );
       if (verification) {
