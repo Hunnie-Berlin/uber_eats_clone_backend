@@ -69,7 +69,7 @@ export class Order extends CoreEntity {
   items: OrderItem[];
 
   @Field(() => Float, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ type: 'real', nullable: true })
   @IsNumber()
   total?: number;
 
