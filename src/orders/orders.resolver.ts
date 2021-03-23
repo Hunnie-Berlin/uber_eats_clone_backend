@@ -54,7 +54,7 @@ export class OrderResolver {
   }
 
   @Mutation(() => EditOrderOutput)
-  @Role(['Owner', 'Delevery'])
+  @Role(['Owner', 'Delivery'])
   editOrder(
     @AuthUser() user: User,
     @Args('input') editOrderInput: EditOrderInput,
@@ -75,7 +75,7 @@ export class OrderResolver {
   }
 
   @Subscription(() => Order)
-  @Role(['Delevery'])
+  @Role(['Delivery'])
   cookedOrders() {
     return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
   }
@@ -102,7 +102,7 @@ export class OrderResolver {
   }
 
   @Mutation(() => TakeOrderOutput)
-  @Role(['Delevery'])
+  @Role(['Delivery'])
   takeOrder(
     @AuthUser() driver: User,
     @Args('input') takeOrderInput: TakeOrderInput,

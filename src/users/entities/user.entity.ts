@@ -16,7 +16,7 @@ import { Payment } from 'src/payments/entities/payment.entity';
 export enum UserRole {
   Client = 'Client',
   Owner = 'Owner',
-  Delevery = 'Delevery',
+  Delivery = 'Delivery',
 }
 
 registerEnumType(UserRole, { name: 'UserRole' });

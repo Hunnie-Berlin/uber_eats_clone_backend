@@ -122,7 +122,7 @@ export class OrderService {
             ...(status && { status }),
           },
         });
-      } else if (user.role === UserRole.Delevery) {
+      } else if (user.role === UserRole.Delivery) {
         orders = await this.orders.find({
           where: {
             driver: user,
@@ -158,7 +158,7 @@ export class OrderService {
     if (user.role === UserRole.Client && order.customerId !== user.id) {
       canSee = false;
     }
-    if (user.role === UserRole.Delevery && order.driverId !== user.id) {
+    if (user.role === UserRole.Delivery && order.driverId !== user.id) {
       canSee = false;
     }
     if (user.role === UserRole.Owner && order.restaurant.ownerId !== user.id) {
@@ -172,9 +172,7 @@ export class OrderService {
     { id: orderId }: GetOrderInput,
   ): Promise<GetOrderOutput> {
     try {
-      const order = await this.orders.findOne(orderId, {
-        relations: ['restaurant'],
-      });
+      const order = await this.orders.findOne(orderId);
       if (!order) {
         return {
           ok: false,
@@ -223,7 +221,7 @@ export class OrderService {
           canEdit = false;
         }
       }
-      if (user.role === UserRole.Delevery) {
+      if (user.role === UserRole.Delivery) {
         if (
           status !== OrderStatus.PickedUp &&
           status !== OrderStatus.Dilevered
