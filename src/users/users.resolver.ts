@@ -1,3 +1,4 @@
+import { AddAddressOutput, AddAddressInput } from './dtos/add-address.dto';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { Role } from 'src/auth/role.decorator';
@@ -49,6 +50,15 @@ export class UserResolver {
     @Args('input') editProfileInput: EditProfileInput,
   ): Promise<EditProfileOutput> {
     return this.userService.editProfile(authUser.id, editProfileInput);
+  }
+
+  @Mutation(() => AddAddressOutput)
+  @Role(['Client'])
+  async addAddress(
+    @AuthUser() client: User,
+    @Args('input') addAddressInput: AddAddressInput,
+  ): Promise<AddAddressOutput> {
+    return this.userService.addAddress(client, addAddressInput);
   }
 
   @Mutation(() => VerifyEmailOutput)

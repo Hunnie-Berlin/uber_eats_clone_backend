@@ -13,6 +13,7 @@ import { Verification } from './entities/verification.entity';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { MailService } from 'src/mail/mail.service';
+import { AddAddressInput, AddAddressOutput } from './dtos/add-address.dto';
 
 @Injectable()
 export class UserService {
@@ -124,6 +125,31 @@ export class UserService {
       return {
         ok: false,
         error: 'Could not update profile.',
+      };
+    }
+  }
+
+  async addAddress(
+    client: User,
+    { id, address }: AddAddressInput,
+  ): Promise<AddAddressOutput> {
+    try {
+      const user = await this.users.findOne(id);
+      if (!user) {
+        return {
+          ok: false,
+          error: 'User not found',
+        };
+      }
+      user.address = address;
+      this.users.save(user);
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not add address.',
       };
     }
   }
